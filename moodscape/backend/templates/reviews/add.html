@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}{% if existing_review %}Update{% else %}Add{% endif %} Review - MoodScape{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h2>{% if existing_review %}Update{% else %}Add{% endif %} Review for {{ movie.Name }}</h2>
+    
+    <form method="POST">
+        <div class="form-group">
+            <label for="rating">Rating (1-10):</label>
+            <select id="rating" name="rating" required>
+                <option value="">Select Rating</option>
+                {% for i in range(1, 11) %}
+                    <option value="{{ i }}" {% if existing_review and existing_review.NumRating == i %}selected{% endif %}>
+                        {{ i }} - {% if i <= 3 %}Poor{% elif i <= 5 %}Fair{% elif i <= 7 %}Good{% elif i <= 9 %}Great{% else %}Excellent{% endif %}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="review_text">Review (optional):</label>
+            <textarea id="review_text" name="review_text" rows="6" placeholder="Write your thoughts about this movie...">{% if existing_review %}{{ existing_review.ReviewText }}{% endif %}</textarea>
+        </div>
+        
+        <div class="form-group">
+            <label>Mood Tags (select all that apply):</label>
+            <div class="mood-checkboxes">
+                {% for mood in moods %}
+                    <label class="mood-checkbox">
+                        <input type="checkbox" name="moods" value="{{ mood.MoodID }}" 
+                               {% if existing_review and existing_review.UserMoods and mood.MoodID|string in existing_review.UserMoods.split(',') %}checked{% endif %}>
+                        <span>{{ mood.MoodName }}</span>
+                    </label>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <button type="submit" class="btn btn-primary">
+            {% if existing_review %}Update{% else %}Submit{% endif %} Review
+        </button>
+        <a href="{{ url_for('movie_detail', movie_id=movie.MovieID) }}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

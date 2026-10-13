@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard - MoodScape{% endblock %}
+
+{% block content %}
+<div class="admin-dashboard">
+    <h1>Admin Dashboard</h1>
+    
+    <div class="stats-grid">
+        <div class="stat-card">
+            <h3>Total Users</h3>
+            <p class="stat-number">{{ stats.TotalUsers }}</p>
+        </div>
+        
+        <div class="stat-card">
+            <h3>Total Movies</h3>
+            <p class="stat-number">{{ stats.TotalMovies }}</p>
+        </div>
+        
+        <div class="stat-card">
+            <h3>Total Reviews</h3>
+            <p class="stat-number">{{ stats.TotalReviews }}</p>
+        </div>
+    </div>
+    
+    <div class="admin-actions">
+        <a href="{{ url_for('add_movie') }}" class="btn btn-primary">Add New Movie</a>
+        <a href="{{ url_for('admin_users') }}" class="btn btn-secondary">Manage Users</a>
+        <a href="{{ url_for('admin_requests') }}" class="btn btn-secondary">View Requests</a>
+    </div>
+</div>
+{% endblock %}

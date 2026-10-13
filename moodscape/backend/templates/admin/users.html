@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Users - MoodScape{% endblock %}
+
+{% block content %}
+<div class="admin-users">
+    <h1>Manage Users</h1>
+    
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Join Date</th>
+                <th>Movies Reviewed</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+                <tr>
+                    <td>{{ user.UserID }}</td>
+                    <td>{{ user.Name }}</td>
+                    <td>{{ user.Email }}</td>
+                    <td>{{ user.Role }}</td>
+                    <td>{{ user.JoinDate.strftime('%Y-%m-%d') }}</td>
+                    <td>{{ user.MoviesReviewed }}</td>
+                    <td>
+                        {% if user.IsActive %}
+                            <span class="status-active">Active</span>
+                        {% else %}
+                            <span class="status-inactive">Banned</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if user.Role != 'Admin' %}
+                            {% if user.IsActive %}
+                                <button class="btn btn-small btn-danger" onclick="banUser({{ user.UserID }})">Ban</button>
+                            {% else %}
+                                <button class="btn btn-small btn-success" onclick="unbanUser({{ user.UserID }})">Unban</button>
+                            {% endif %}
+                        {% else %}
+                            <span class="no-action">N/A</span>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Movies - MoodScape{% endblock %}
+
+{% block content %}
+<h1>All Movies</h1>
+
+{% if 'user_role' in session and session['user_role'] == 'admin' %}
+    <div class="admin-actions">
+        <a href="{{ url_for('add_movie') }}" class="btn btn-primary">Add New Movie</a>
+    </div>
+{% endif %}
+
+<div class="movies-grid">
+    {% for movie in movies %}
+        <div class="movie-card">
+            <div class="movie-header">
+                <h3><a href="{{ url_for('movie_detail', movie_id=movie.MovieID) }}">{{ movie.Name }}</a></h3>
+                <span class="movie-year">({{ movie.ReleaseYear }})</span>
+            </div>
+            
+            <div class="movie-info">
+                <p class="movie-genre">Genre: {{ movie.GenreName }}</p>
+                
+                {% if movie.AverageRating %}
+                    <div class="movie-rating">
+                        <span class="rating-score">{{ "%.1f"|format(movie.AverageRating) }}</span>/10
+                        <span class="rating-count">({{ movie.TotalRatings }} ratings)</span>
+                    </div>
+                {% else %}
+                    <p class="no-ratings">No ratings yet</p>
+                {% endif %}
+                
+                <p class="movie-summary">{{ movie.Summary[:150] }}{% if movie.Summary|length > 150 %}...{% endif %}</p>
+            </div>
+            
+            <div class="movie-actions">
+                <a href="{{ url_for('movie_detail', movie_id=movie.MovieID) }}" class="btn btn-small">View Details</a>
+                {% if 'user_id' in session %}
+                    <a href="{{ url_for('add_review', movie_id=movie.MovieID) }}" class="btn btn-small btn-secondary">Add Review</a>
+                {% endif %}
+            </div>
+        </div>
+    {% else %}
+        <p>No movies found.</p>
+    {% endfor %}
+</div>
+{% endblock %}

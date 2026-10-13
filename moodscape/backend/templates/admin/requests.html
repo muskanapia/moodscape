@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}User Requests - MoodScape{% endblock %}
+
+{% block content %}
+<div class="admin-requests">
+    <h1>User Requests</h1>
+    
+    {% if requests %}
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>User</th>
+                    <th>Type</th>
+                    <th>Details</th>
+                    <th>Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for request in requests %}
+                    <tr>
+                        <td>{{ request.RequestID }}</td>
+                        <td>{{ request.UserName }}</td>
+                        <td>{{ request.RequestType }}</td>
+                        <td>{{ request.RequestData }}</td>
+                        <td>{{ request.CreatedAt.strftime('%Y-%m-%d %H:%M') }}</td>
+                        <td>
+                            <button class="btn btn-small btn-success" onclick="approveRequest({{ request.RequestID }})">Approve</button>
+                            <button class="btn btn-small btn-danger" onclick="rejectRequest({{ request.RequestID }})">Reject</button>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No pending requests.</p>
+    {% endif %}
+</div>
+{% endblock %}
